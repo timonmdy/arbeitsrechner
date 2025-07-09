@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Arbeitsrechner</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	
+	<style>
+
+	</style>
+</head>
+<body>
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-9">
+				<div class="mt-3">
+					<div class="card">
+					  <div class="card-body">
+						<h5 class="card-title">Einstellungen</h5>
+						<div class="row mt-3">
+							<div class="col">
+								<div class="input-group mb-3">
+								  <span class="input-group-text" id="ankunftszeit_label">Ankunftszeit</span>
+								  <input type="time" class="form-control" aria-describedby="ankunftszeit_label" id="ankunftszeit">
+								</div>
+							</div>
+							<div class="col">
+								<div class="input-group mb-3">
+								  <span class="input-group-text" id="wochenarbeitszeit_label">Wochenarbeitszeit</span>
+								  <input type="number" class="form-control" aria-describedby="wochenarbeitszeit_label" id="wochenarbeitszeit" value="35.5">
+								</div>
+							</div>
+							<div class="col">
+								<div class="input-group mb-3">
+								  <span class="input-group-text" id="tatsaechliche_pause_label">Tatsächliche Pause</span>
+								  <input type="number" class="form-control" aria-describedby="tatsaechliche_pause_label" id="tatsaechliche_pause" value="30" min="0">
+								</div>
+							</div>
+						</div>
+						<div class="row mt-3">
+							<h6>Gewünschte Zeiten</h6>
+							<p>Hier die gewünschte Ziel-Zeit eingeben. Da sich die Felder zumeist ausschließen, kann jeweils nur eines ausgefüllt werden.</p>
+							<div class="col">
+								<div class="input-group mb-3">
+								  <span class="input-group-text" id="schlusszeit_label">Schlusszeit</span>
+								  <input type="time" class="form-control" aria-describedby="schlusszeit_label" id="schlusszeit">
+								</div>
+							</div>
+							<div class="col">
+								<div class="input-group mb-3">
+								  <span class="input-group-text" id="gleitzeit_label">Gleitzeit</span>
+								  <input type="time" class="form-control" aria-describedby="gleitzeit_label" id="gleitzeit">
+								</div>
+							</div>
+						</div>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-3">
+				<div class="mt-3">
+					<div class="card">
+					  <div class="card-body">
+						<h5 class="card-title">Verwalten</h5>
+						<div class="row mt-3">
+							<div class="col">
+								<div class="input-group mb-3">
+									<div class="input-group mb-3">
+									  <input type="checkbox" id="erweiterter_modus" class="me-2"><span>Erweiterter Modus</span>
+										<button type="button" class="btn btn-danger mt-2">Gespeicherte Daten löschen</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="mt-3">
+					<div class="card">
+					  <div class="card-body">
+						<h5 class="card-title">Auswertung</h5>
+						<div class="row mt-3">
+							<div class="col">
+								
+							</div>
+						</div>
+					  </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<div class="container"></div>
+
+	<script>
+		const pageElements = {
+			ankunftszeit: document.getElementByID('ankunftszeit');
+			wochenarbeitszeit: document.getElementByID('wochenarbeitszeit');
+			tatsaechliche_pause: document.getElementByID('tatsaechliche_pause');
+			schlusszeit: document.getElementByID('schlusszeit');
+			gleitzeit: document.getElementByID('gleitzeit');
+		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
