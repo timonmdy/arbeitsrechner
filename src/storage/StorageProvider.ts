@@ -1,4 +1,5 @@
 export type StorageKey =
+    | "arbeitsbeginn"
     | "hoTage"
     | "region"
     | "hoMonat"
@@ -13,6 +14,10 @@ export type StorageKey =
     | "sidebarLocked";
 
 const defaultValues: Record<StorageKey, unknown> = {
+    "arbeitsbeginn": {
+        value: "string",
+        date: ""
+    },
     "hoTage": 0,
     "region": "BUND",
     "hoMonat": new Date().getMonth() + 1,
