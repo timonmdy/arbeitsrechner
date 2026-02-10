@@ -8,9 +8,12 @@ function toMinutes(t: string): number {
     return h * 60 + m;
 }
 function toTime(min: number): string {
-    const h = Math.floor(Math.max(0, min) / 60);
-    const m = Math.max(0, min) % 60;
-    return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+    const isNegative = min < 0;
+    const absMin = Math.abs(min);
+    const h = Math.floor(absMin / 60);
+    const m = absMin % 60;
+    const sign = isNegative ? "-" : "";
+    return `${sign}${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
 }
 function clamp(v: number, min: number, max: number): number {
     return Math.max(min, Math.min(max, v));
@@ -81,7 +84,9 @@ const Arbeitszeitrechner: React.FC = () => {
     const now = new Date();
     const nowMin = now.getHours() * 60 + now.getMinutes();
 
-    // Berechnung: Bis jetzt gearbeitet (immer aktuelle Zeit - Arbeitsbeginn - Pause)
+    // Berechnung: Bis jetzt gearbeitet
+    // Die Anwesenheitszeit ist: jetzt - Start
+    // Die Arbeitszeit ist: Anwesenheitszeit - Pause (wenn Pause greift)
     const totalDuration = nowMin - startMin;
     const effectivePause = totalDuration >= 360 ? pauseMin : 0;
     const workedMin = start
@@ -91,11 +96,17 @@ const Arbeitszeitrechner: React.FC = () => {
     // Gleitzeit (bei sofortigem Ende = jetzt)
     const gleitzeitSofort = workedMin - sollMin;
 
-    // PLUS (Überstunden nach Soll-Ende, nur wenn Endzeit gesetzt und überschritten)
-    const requiredEndMin = start ? startMin + sollMin + pauseMin : 0;
-    const plus = end && endMin > requiredEndMin ? endMin - requiredEndMin : 0;
+    // Gleitzeit basierend auf tatsächlichem Arbeitsende (wenn gesetzt)
+    // Anwesenheitszeit (Ende - Start) minus Pause = tatsächliche Arbeitszeit
+    const totalPresenceTime = end && start ? endMin - startMin : 0;
+    const effectivePauseForEnd = totalPresenceTime >= 360 ? pauseMin : 0;
+    const actualWorkedWithEnd = end && start ? totalPresenceTime - effectivePauseForEnd : workedMin;
+    const gleitzeit = end && start ? actualWorkedWithEnd - sollMin : gleitzeitSofort;
 
-    const progress = sollMin > 0 ? clamp((workedMin / sollMin) * 100, 0, 100) : 0;
+    // Progress basierend auf tatsächlichem Zeitraum (Start bis Ende)
+    const totalWorkPeriod = end && start ? endMin - startMin : sollMin + pauseMin;
+    const elapsedSinceStart = start ? nowMin - startMin : 0;
+    const progress = totalWorkPeriod > 0 ? clamp((elapsedSinceStart / totalWorkPeriod) * 100, 0, 100) : 0;
 
     useEffect(() => {
         if (start && !manualEnd) {
@@ -262,7 +273,9 @@ const Arbeitszeitrechner: React.FC = () => {
                         </div>
                         <div>
                             <div className="text-neutral-400 text-sm mb-1">Gleitzeit</div>
-                            <div className="text-2xl font-extrabold text-emerald-400">{toTime(plus)} h</div>
+                            <div className={`text-2xl font-extrabold ${
+                                gleitzeit >= 0 ? "text-emerald-400" : "text-rose-400"
+                            }`}>{toTime(gleitzeit)} h</div>
                         </div>
                         <div>
                             <div className="text-neutral-400 text-sm mb-1">Verbleibend</div>
@@ -276,7 +289,7 @@ const Arbeitszeitrechner: React.FC = () => {
                                     gleitzeitSofort >= 0 ? "text-emerald-400" : "text-rose-400"
                                 }`}
                             >
-                                {(gleitzeitSofort / 60).toFixed(2)} h
+                                {toTime(gleitzeitSofort)} h
                             </div>
                         </div>
                     </div>
